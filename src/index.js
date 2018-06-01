@@ -64,7 +64,7 @@ class PaypalButton extends React.Component {
                     this.props.onSuccess(payment);
                 })
             }
-            return this.props.onSuccess(data);
+            this.props.onSuccess(data);
         }
 
         let ppbtn = '';
