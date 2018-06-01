@@ -38,13 +38,19 @@ class PaypalButton extends React.Component {
       return paypal.rest.payment.create(
         this.props.env,
         this.props.client,
-        {
-          transactions: [
-            {
-              amount: { total: this.props.total, currency: this.props.currency }
-            }
-          ]
-        },
+        Object.assign(
+          {
+            transactions: [
+              {
+                amount: {
+                  total: this.props.total,
+                  currency: this.props.currency
+                }
+              }
+            ]
+          },
+          this.props.paymentOptions
+        ),
         {
           input_fields: {
             // any values other than null, and the address is not returned after payment execution.
@@ -55,9 +61,6 @@ class PaypalButton extends React.Component {
     };
 
     const onAuthorize = (data, actions) => {
-      console.log("-----------------data onAuthorize-------------------");
-      console.log(data);
-      console.log("------------------------------------");
       this.props.onSuccess(data);
     };
 
@@ -86,11 +89,11 @@ PaypalButton.propTypes = {
   currency: PropTypes.string.isRequired,
   total: PropTypes.number.isRequired,
   client: PropTypes.object.isRequired,
-  style: PropTypes.object,
-  execute: PropTypes.boolean
+  style: PropTypes.object
 };
 
 PaypalButton.defaultProps = {
+  paymentOptions: {},
   env: "sandbox",
   execute: false,
   // null means buyer address is returned in the payment execution response
