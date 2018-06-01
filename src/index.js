@@ -69,7 +69,7 @@ class PaypalButton extends React.Component {
                 // shipping={this.props.shipping}
             />
         }
-        return <div>{ppbtn}</div>;
+        return <div>hola</div>// <div>{ppbtn}</div>;
     }
 }
 
