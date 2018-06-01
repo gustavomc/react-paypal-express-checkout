@@ -48,6 +48,9 @@ class PaypalButton extends React.Component {
         }
 
         const onAuthorize = (data, actions) => {
+            console.log('-----------------data onAuthorize-------------------');
+            console.log(data);
+            console.log('------------------------------------');
             this.props.onSuccess(data);
         }
 
