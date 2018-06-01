@@ -48,20 +48,23 @@ class PaypalButton extends React.Component {
         }
 
         const onAuthorize = (data, actions) => {
-            return actions.payment.execute().then((payment_data) => {
-                // console.log(`payment_data: ${JSON.stringify(payment_data, null, 1)}`)
-                const payment = Object.assign({}, this.props.payment);
-                payment.paid = true;
-                payment.cancelled = false;
-                payment.payerID = data.payerID;
-                payment.paymentID = data.paymentID;
-                payment.paymentToken = data.paymentToken;
-                payment.returnUrl = data.returnUrl;
-                // getting buyer's shipping address and email
-                payment.address = payment_data.payer.payer_info.shipping_address;
-                payment.email = payment_data.payer.payer_info.email;
-                this.props.onSuccess(payment);
-            })
+            if (this.props.execute) {
+                return actions.payment.execute().then((payment_data) => {
+                    // console.log(`payment_data: ${JSON.stringify(payment_data, null, 1)}`)
+                    const payment = Object.assign({}, this.props.payment);
+                    payment.paid = true;
+                    payment.cancelled = false;
+                    payment.payerID = data.payerID;
+                    payment.paymentID = data.paymentID;
+                    payment.paymentToken = data.paymentToken;
+                    payment.returnUrl = data.returnUrl;
+                    // getting buyer's shipping address and email
+                    payment.address = payment_data.payer.payer_info.shipping_address;
+                    payment.email = payment_data.payer.payer_info.email;
+                    this.props.onSuccess(payment);
+                })
+            }
+            return this.props.onSuccess(data);
         }
 
         let ppbtn = '';
@@ -87,11 +90,13 @@ PaypalButton.propTypes = {
     currency: PropTypes.string.isRequired,
     total: PropTypes.number.isRequired,
     client: PropTypes.object.isRequired,
-    style: PropTypes.object
+    style: PropTypes.object,
+    execute?: PropTypes.boolean
 }
 
 PaypalButton.defaultProps = {
     env: 'sandbox',
+    execute: false,
     // null means buyer address is returned in the payment execution response
     shipping: null,
     onSuccess: (payment) => {
