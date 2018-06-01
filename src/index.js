@@ -48,22 +48,6 @@ class PaypalButton extends React.Component {
         }
 
         const onAuthorize = (data, actions) => {
-            if (this.props.execute) {
-                return actions.payment.execute().then((payment_data) => {
-                    // console.log(`payment_data: ${JSON.stringify(payment_data, null, 1)}`)
-                    const payment = Object.assign({}, this.props.payment);
-                    payment.paid = true;
-                    payment.cancelled = false;
-                    payment.payerID = data.payerID;
-                    payment.paymentID = data.paymentID;
-                    payment.paymentToken = data.paymentToken;
-                    payment.returnUrl = data.returnUrl;
-                    // getting buyer's shipping address and email
-                    payment.address = payment_data.payer.payer_info.shipping_address;
-                    payment.email = payment_data.payer.payer_info.email;
-                    this.props.onSuccess(payment);
-                })
-            }
             this.props.onSuccess(data);
         }
 
